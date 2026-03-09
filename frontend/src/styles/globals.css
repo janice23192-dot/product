@@ -1,0 +1,44 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Security Intelligence Platform - Dark Theme (Req 6.12) */
+:root {
+  --color-bg: #0d0d1a;
+  --color-surface: #1a1a2e;
+  --color-surface-2: #16213e;
+  --color-surface-3: #0f3460;
+  --color-primary: #00d4ff;
+  --color-text: #e0e0e0;
+  --color-text-dim: #888;
+  --color-border: #2d2d44;
+  --color-severity-critical: #ff1744;
+  --color-severity-high: #ff6d00;
+  --color-severity-medium: #ffab00;
+  --color-severity-low: #00c853;
+  --color-severity-info: #2979ff;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: var(--color-bg); }
+::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--color-primary); }
+
+/* Utility classes */
+@layer components {
+  .card { @apply bg-surface-800 border border-surface-100 rounded-lg p-4; }
+  .btn-primary { @apply bg-primary text-black px-4 py-2 rounded font-medium hover:bg-primary-700 transition-colors; }
+  .btn-secondary { @apply bg-surface-200 text-white px-4 py-2 rounded font-medium hover:bg-surface-300 transition-colors; }
+  .severity-critical { @apply text-severity-critical; }
+  .severity-high { @apply text-severity-high; }
+  .severity-medium { @apply text-severity-medium; }
+  .severity-low { @apply text-severity-low; }
+  .severity-info { @apply text-severity-info; }
+}
