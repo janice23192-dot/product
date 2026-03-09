@@ -1,0 +1,98 @@
+---
+# Security Intelligence Platform - Kubernetes Deployment
+# Req 14.1-14.12, 13.1-13.12
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sip-api
+  labels:
+    app: sip
+    component: api
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: sip
+      component: api
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: sip
+        component: api
+    spec:
+      containers:
+        - name: api
+          image: sip/api:latest
+          ports:
+            - containerPort: 8000
+          env:
+            - name: SIP_ENVIRONMENT
+              value: production
+            - name: SIP_LOG_LEVEL
+              value: INFO
+          resources:
+            requests:
+              cpu: 500m
+              memory: 512Mi
+            limits:
+              cpu: 2000m
+              memory: 2Gi
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 30
+            periodSeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 10
+            periodSeconds: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sip-api
+  labels:
+    app: sip
+    component: api
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8000
+      targetPort: 8000
+      protocol: TCP
+  selector:
+    app: sip
+    component: api
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: sip-api-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: sip-api
+  minReplicas: 3
+  maxReplicas: 20
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 80
