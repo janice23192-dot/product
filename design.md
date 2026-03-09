@@ -1751,16 +1751,26 @@ The platform UI follows security operations center (SOC) design patterns inspire
 
 ### Color Palette
 
+**Color Palette** (Palantir-Inspired)
+
 **Background Colors**:
-- Primary Background: `#0A0E27` (deep navy)
-- Secondary Background: `#141B3D` (lighter navy)
-- Panel Background: `#1A2347` (elevated panels)
+- Primary Background: `#0A0E27` (deep navy - main canvas)
+- Secondary Background: `#141B3D` (lighter navy - panels)
+- Panel Background: `#1A2347` (elevated panels and sidebars)
 - Hover State: `#242D52` (interactive elements)
+- Border/Divider: `#2A3555` (subtle separators)
 
 **Text Colors**:
-- Primary Text: `#E8EAED` (high contrast white)
-- Secondary Text: `#9AA0B8` (muted gray)
+- Primary Text: `#E8EAED` (high contrast white for labels)
+- Secondary Text: `#9AA0B8` (muted gray for descriptions)
 - Disabled Text: `#5A6178` (low contrast gray)
+- Link/Interactive: `#4A9EFF` (bright blue)
+
+**Status Colors** (for asset/entity states):
+- Ready/Active: `#2ED573` (green)
+- Enroute/In Progress: `#FFA502` (orange/yellow)
+- Error/Critical: `#FF4757` (red)
+- Offline/Inactive: `#747D8C` (gray)
 
 **Accent Colors**:
 - Critical/High Severity: `#FF4757` (red)
@@ -1768,6 +1778,12 @@ The platform UI follows security operations center (SOC) design patterns inspire
 - Info/Low Severity: `#3742FA` (blue)
 - Success/Resolved: `#2ED573` (green)
 - Neutral: `#747D8C` (gray)
+
+**Route/Path Colors** (for geospatial views):
+- Primary Route: `#00A8FF` (bright blue)
+- Alternative Route: `#FFC312` (yellow)
+- Threat Path: `#FF4757` (red)
+- Safe Path: `#2ED573` (green)
 
 **Data Visualization Colors**:
 - Primary: `#00D2FF` (cyan)
@@ -1781,24 +1797,26 @@ The platform UI follows security operations center (SOC) design patterns inspire
 **Main Application Shell**:
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│ Top Bar: Logo | Search | Alerts (3) | User Menu            │
-├─────────────────────────────────────────────────────────────┤
-│ │                                                           │
-│ │                                                           │
-│S│                  Main Content Area                        │
-│i│                                                           │
-│d│                                                           │
-│e│                                                           │
-│b│                                                           │
-│a│                                                           │
-│r│                                                           │
-│ │                                                           │
-│ │                                                           │
-└─┴───────────────────────────────────────────────────────────┘
+│ Top Bar: Logo | Tabs | Search | Alerts (3) | User Menu     │
+├──┬──────────────────────────────────────────────────────────┤
+│  │                                                           │
+│  │                                                           │
+│S │              Main Content Area / Map Canvas              │
+│i │                                                           │
+│d │                                                           │
+│e │                                                           │
+│b │                                                           │
+│a │                                                           │
+│r │                                                           │
+│  │                                                           │
+├──┴──────────────────────────────────────────────────────────┤
+│ Bottom Timeline Scrubber (for temporal views)               │
+└─────────────────────────────────────────────────────────────┘
 ```
 
-**Sidebar Navigation** (60px collapsed, 240px expanded):
+**Sidebar Navigation** (280px for operations, collapsible):
 - Dashboard
+- Operations (Geospatial)
 - Investigations
 - Alerts
 - Threat Hunting
@@ -1806,6 +1824,13 @@ The platform UI follows security operations center (SOC) design patterns inspire
 - Timeline
 - Reports
 - Settings
+
+**Palantir-Style Panels**:
+- Panels use dark navy backgrounds (#141B3D to #1A2347)
+- Subtle borders and dividers (#2A3555)
+- Collapsible sections with chevron indicators
+- Smooth animations for expand/collapse
+- Scrollable content areas with custom dark scrollbars
 
 ### Key UI Components
 
@@ -1897,16 +1922,120 @@ Hypothesis-driven hunting workspace:
 - Hunting notebooks: Document investigation with queries, findings, notes
 - Convert to detection: Turn hunting query into automated detection rule
 
-**6. Geospatial View**
+**6. Geospatial Operations View** (Inspired by Palantir Gotham)
 
-Interactive map for geographic analysis:
-- Base map: Dark theme map with country/region boundaries
-- Event markers: Clustered markers for events by location
-- Heat map: Density visualization of threat activity
-- Connection lines: Show network connections between locations
-- Geofencing: Draw regions for alerts
-- Filters: Event type, severity, time range
-- Playback: Animate events over time on map
+Full-screen satellite/aerial imagery interface for geographic intelligence:
+
+**Main Map Canvas**:
+- High-resolution satellite/aerial imagery base layer
+- Support for multiple map providers (Mapbox, Google Earth, custom imagery)
+- Smooth pan and zoom with mouse/trackpad
+- 3D terrain visualization option
+- Coordinate display in multiple formats (lat/long, MGRS, UTM)
+
+**Activity Overlay Layer**:
+- Real-time entity positions with custom icons (vehicles, personnel, facilities)
+- Movement trails showing historical paths (color-coded by time)
+- Activity zones highlighted with colored polygons
+- Connection lines between related entities
+- Geofenced areas with alert boundaries
+- Heat maps for activity density
+
+**Left Sidebar - Operations Panel**:
+- **Mini-map**: Overview map showing current viewport location
+- **Activity Feed**: Real-time list of detected activities with timestamps
+  - Vehicle movements with count indicators
+  - Personnel tracking
+  - Facility status updates
+  - Color-coded by activity type
+- **Nearby Objects**: List of entities within viewport with distance indicators
+- **Filters**: Toggle layers (vehicles, personnel, facilities, alerts)
+- **Time Controls**: Select time range for historical playback
+
+**Bottom Timeline Scrubber**:
+- Horizontal timeline spanning hours/days/weeks
+- Activity histogram showing event density over time
+- Draggable playhead for temporal navigation
+- Zoom controls for timeline granularity
+- Current time indicator with timestamp
+- Playback controls (play, pause, speed adjustment)
+- Event markers on timeline (clickable to jump to event)
+
+**Top Toolbar**:
+- View mode toggles (2D map, 3D terrain, satellite, hybrid)
+- Measurement tools (distance, area, bearing)
+- Annotation tools (draw polygons, lines, markers, text)
+- Layer controls (toggle overlays on/off)
+- Export/screenshot functionality
+- Share operation view with team
+
+**Right Panel - Entity Details** (appears on selection):
+- Entity type and identifier
+- Current status and last update time
+- Attributes and metadata
+- Related entities and relationships
+- Activity history timeline
+- Quick actions (track, alert, add to case)
+
+**7. Mission Planning Interface** (Inspired by Palantir Operations)
+
+Tactical planning workspace with asset management:
+
+**Left Sidebar - Asset Management**:
+- **Operation Header**: Operation name, status badge, share button
+- **Request Asset Panel**: 
+  - Asset type selector (aircraft, vehicles, personnel, equipment)
+  - Asset list with status indicators (READY, ENROUTE, ERROR, OFFLINE)
+  - Asset icons with identifiers (TR-422, TR-406, etc.)
+  - Status color coding (green=ready, yellow=enroute, red=error, gray=offline)
+- **Task Type Selector**: Dropdown for mission type selection
+- **Route and Destination**:
+  - Current location with coordinates
+  - Destination selector with map integration
+  - Route visualization on map
+- **Request Status Timeline**:
+  - Status updates with timestamps
+  - User attribution for each status change
+  - Visual timeline with connecting lines
+
+**Main Map Canvas**:
+- Satellite/aerial imagery base layer
+- **Route Visualization**:
+  - Multi-colored route paths (blue, yellow, orange for different segments/assets)
+  - Waypoint markers along routes
+  - Start point (safehouse) and end point (destination) clearly marked
+  - Alternative routes shown in different colors
+- **Location Markers**:
+  - Key locations labeled (Safehouse, Church, School, Roadblock, Anti-Aircraft, US Embassy)
+  - Threat zones highlighted in red/orange
+  - Safe zones in blue
+  - Neutral locations in gray
+- **Asset Positions**: Real-time asset icons on map
+
+**Top Toolbar**:
+- Operation tabs (Global Overview, Operation NEO, etc.)
+- Annotation mode selector (SYMBOL, drawing tools)
+- New annotation button
+- View controls (zoom, pan, reset)
+- Search bar for locations/assets
+
+**Interaction Patterns**:
+- Click asset in sidebar to highlight on map
+- Click map location to set waypoint
+- Drag route to adjust path
+- Right-click for context menu (add waypoint, set alert, etc.)
+- Hover over route segment to see distance/time estimates
+
+**8. Dashboard Builder**
+
+Customizable dashboard creation:
+- Widget library: 20+ visualization types
+- Drag-and-drop: Position widgets on grid layout
+- Widget configuration: Data source, refresh interval, filters
+- Dashboard templates: Pre-built dashboards for common use cases
+- Role-based dashboards: Different views for analysts, operators, managers
+- Real-time updates: Widgets update automatically
+- Export: Export dashboard as PDF or image
 
 **7. Dashboard Builder**
 
